@@ -31,6 +31,7 @@ public class Main
 		try
 		{
 			HederaAccount account = new HederaAccount();
+		    HederaContract contract= new HederaContract();
 			txQueryDefaults = new HederaTransactionAndQueryDefaults();
 		    txQueryDefaults = ExampleUtilities.getTxQueryDefaults();
 		    account.txQueryDefaults = txQueryDefaults;
@@ -45,10 +46,14 @@ public class Main
 				prop.load(input);
 				node.setHostPort(prop.getProperty("nodeaddress"), Integer.valueOf(prop.getProperty("nodeport")));
 				node.setAccountID(Long.parseLong(prop.getProperty("nodeAccountShard")), Long.parseLong(prop.getProperty("nodeAccountRealm")), Long.parseLong(prop.getProperty("nodeAccountNum")));
-				//get the property value and print it out
-			    account.accountNum = Long.parseLong(prop.getProperty("payingAccountNum"));
-			    account.realmNum = Long.parseLong(prop.getProperty("payingAccountRealm"));
-			    account.shardNum = Long.parseLong(prop.getProperty("payingAccountShard"));
+				//get the property value of the contract
+		        account.accountNum = Long.parseLong(prop.getProperty("payingAccountNum"));
+		        account.realmNum = Long.parseLong(prop.getProperty("payingAccountRealm"));
+		        account.shardNum = Long.parseLong(prop.getProperty("payingAccountShard"));
+				contract.contractAccountAccountNum = Long.parseLong(prop.getProperty("payingAccountNum"));
+				contract.contractAccountRealmNum = Long.parseLong(prop.getProperty("payingAccountRealm"));
+				contract.contractAccountShardNum = Long.parseLong(prop.getProperty("payingAccountShard"));
+				
 			    account.setNode(node);
 			}
 			catch (Exception e)
@@ -66,6 +71,11 @@ public class Main
 			
 			Thread.sleep(1500);
 			accountRecord(account);	
+			
+			Thread.sleep(1500);
+			contractRecord(contract);
+			
+			
 		}
 		catch(Exception e)
 		{
@@ -139,6 +149,7 @@ public class Main
 	//get contract records
 	public static void contractRecord(HederaContract contract) throws Exception
 	{
+		
 		List<HederaTransactionRecord> records = new ArrayList<HederaTransactionRecord>();
 		records = contract.getTransactionRecords();
 		if (records != null) 
